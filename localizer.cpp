@@ -181,8 +181,10 @@ vector< vector <float> > move(int dy, int dx,
             new_c = (j + dx) % width;
             newGrid[new_r][new_c] = beliefs[i][j];
         }
-    }
-    
+   }
+
+   return blur(newGrid, blurring);
+}
 
     
 
