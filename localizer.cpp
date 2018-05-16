@@ -47,11 +47,14 @@ vector< vector <float> > initialize_beliefs(vector< vector <char> > grid) {
     float width = sizeof(grid[0]);
     float area = height * width;
     float belief_per_cell = 1.0 / area;
-    vector<float>beliefs;
+    
     for(int i = 0; i < height; i++ ) {
+        vector<float>new_row;
+        new_row.clear();
         for(int j = 0; i < width; j++ ) {
-            newGrid[i][j] = belief_per_cell;
+            new_row.push_back(belief_per_cell);
         }
+        newGrid.push_back(new_row);
     }
 
 
