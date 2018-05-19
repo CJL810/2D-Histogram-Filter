@@ -33,28 +33,30 @@ using namespace std;
 */
 vector< vector<float> > normalize(vector< vector <float> > grid) {
 
-    vector< vector<float> > newGrid;
+    //vector< vector<float> > newGrid;
 
     // todo - your code here
 
     float total = 0;
-    for(int row = 0; row < grid.size(); row++ ) {
-        for(int cell = 0; cell < grid[0].size(); cell++ ) {
-            total += grid[row][cell];
-        }
-    }
-    
-    for(int row = 0; row < grid.size(); row++ ) {
-        vector<float> new_row;
-        new_row.clear();
-        for(int cell = 0; cell < grid[0].size(); cell++ ) {
-            new_row.push_back(grid[row][cell] / total);
-        }
-        newGrid.push_back(new_row);
-    }
-    
-    
+    const int row = grid.size();
+    const int cell = grid[0].size();
 
+    vector<vector<float>> newGrid(row, vector<float>(cell, 0));
+
+    for(int i = 0; i < row; i++ ) {
+        for(int j = 0; j < cell; j++ ) {
+            total += grid[i][j];
+            newGrid[i][j] = grid[i][j];
+        }
+    }
+    
+    if (total != 0 ) {
+        for(int i = 0; i < row; i++ ) {
+            for(int j = 0; j < cell; j++ ) {
+                newGrid[i][j] = grid[i][j] / total;
+            }
+        }
+    }
     return newGrid;
 }
 
@@ -95,8 +97,8 @@ vector < vector <float> > blur(vector < vector < float> > grid, float blurring) 
 
     // your code here
 
-    int height = grid.size();
-    int width = grid[0].size();
+    const int height = grid.size();
+    const int width = grid[0].size();
     float center_prob = 1.0 - blurring;
     float corner_prob = blurring / 12.0;
     float adjacent_prob = blurring / 6.0;
@@ -107,7 +109,8 @@ vector < vector <float> > blur(vector < vector < float> > grid, float blurring) 
         {corner_prob, adjacent_prob, corner_prob}
     };
 
-    vector < vector <float> > newGrid(height, vector<float>(width, 0.0));
+    vector< vector<float> > newGrid;
+    newGrid.assign(height, vector<float>(width));
 
     for(int i = 0; i < height; i++ ) {
         for(int j = 0; j < width; j++ ) {

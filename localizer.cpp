@@ -43,18 +43,19 @@ vector< vector <float> > initialize_beliefs(vector< vector <char> > grid) {
 
     // your code here
 
-    float height = sizeof(grid);
-    float width = sizeof(grid[0]);
+    const int height = grid.size();
+    const int width = grid[0].size();
     float area = height * width;
     float belief_per_cell = 1.0 / area;
+    vector<float>new_row;
     
     for(int i = 0; i < height; i++ ) {
-        vector<float>new_row;
         new_row.clear();
-        for(int j = 0; i < width; j++ ) {
+        for(int j = 0; j < width; j++ ) {
             new_row.push_back(belief_per_cell);
         }
         newGrid.push_back(new_row);
+        new_row.clear();
     }
 
 
@@ -104,25 +105,24 @@ vector< vector <float> > sense(char color,
     float p_hit,
     float p_miss)
 {
-    vector< vector <float> > newGrid;
+   
 
     // your code here
+    const float row = grid.size();
+    const float col = grid[0].size();
 
-    int row = sizeof(grid);
-    int col = sizeof(grid[0]);
+    vector<vector<float>> newGrid(beliefs.size(), vector<float>(beliefs[0].size()));
 
-    for(int r = 0; r < row; r++ ) {
-        for(int c = 0; c < col; c++ ) {
-            newGrid[r][c] = grid[r][c];
-            if (grid[r][c] == color) {
-                newGrid[r][c] *= p_hit;
+	for (int i = 0; i < beliefs.size(); i++) {
+		for (int j = 0; j < beliefs[0].size(); j++) {
+			if (grid[i][j] == color) {
+                newGrid[i][j] = beliefs[i][j] * p_hit;
             }
             else {
-                newGrid[r][c] *= p_miss;
+                newGrid[i][j] = beliefs[i][j] * p_miss;
             }
-        }
-    }
-
+		}
+	}
     return normalize(newGrid);
 }
 
@@ -169,20 +169,21 @@ vector< vector <float> > move(int dy, int dx,
     float blurring)
 {
 
-    vector < vector <float> > newGrid;
 
     // your code here
-    int height = sizeof(beliefs);
-    int width = sizeof(beliefs[0]);
-    int new_r = 0;
-    int new_c = 0;
+    float belief;
+    const int height = beliefs.size();
+    const int width = beliefs[0].size();
+    vector<vector<float>> newGrid(beliefs.size(), vector<float>(beliefs[0].size()));
+  
 
 
     for(int i = 0; i < height; i++ ) {
         for(int j = 0; j < width; j++ ) {
-            new_r = (i + dy) % height;
-            new_c = (j + dx) % width;
-            newGrid[new_r][new_c] = beliefs[i][j];
+            const int new_i = (i + dy + height) % height;
+            const int new_j = (j + dx + width) % width;
+            belief = beliefs[i][j];
+            newGrid[new_i][new_j] = belief;
         }
    }
 
